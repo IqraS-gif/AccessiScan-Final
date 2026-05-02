@@ -138,7 +138,7 @@ export default function Landing() {
         >
           <motion.div variants={fadeIn} whileHover={{ scale: 1.05 }} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary mb-8 text-sm font-bold shadow-[0_0_20px_rgba(108,99,255,0.2)] cursor-default">
             <Sparkles size={16} />
-            <span>Hackathon Winning Accessibility Platform</span>
+            <span>Advanced AI-Powered Web Accessibility Auditor</span>
           </motion.div>
 
           <motion.h1 variants={fadeIn} className="text-6xl md:text-8xl font-black text-primary mb-6 leading-tight drop-shadow-sm">
