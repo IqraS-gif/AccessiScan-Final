@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useThemeStore } from '../store/useThemeStore';
 import { ArrowRight, Sparkles, LayoutDashboard, Code2, Chrome, ScanLine, ShieldCheck, Zap, Loader2 } from 'lucide-react';
 import FeatureCard from '../components/ui/FeatureCard';
 
@@ -77,9 +78,15 @@ const GridBackground = () => {
 export default function Landing() {
   const [demoScore, setDemoScore] = useState(0);
   const [isScanning, setIsScanning] = useState(true);
+  const { setTheme } = useThemeStore();
 
   const demoRef = useRef(null);
   const isDemoInView = useInView(demoRef, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    // Landing page always opens in light theme (Beige/Marrom aesthetic)
+    setTheme('light');
+  }, [setTheme]);
 
   useEffect(() => {
     if (isDemoInView) {
