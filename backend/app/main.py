@@ -28,13 +28,22 @@ cred_path = os.path.join(base_dir, "firebase-credentials.json")
 # Initialize Firebase
 if not firebase_admin._apps:
     try:
-        firebase_creds_json = os.getenv("FIREBASE_CREDENTIALS")
-        if firebase_creds_json:
-            # Use environment variable if present (Cloud/Render)
+        firebase_creds_raw = os.getenv("FIREBASE_CREDENTIALS")
+        if firebase_creds_raw:
             import json
-            creds_dict = json.loads(firebase_creds_json)
+            import base64
+            
+            # Try to decode as base64 first
+            try:
+                decoded_creds = base64.b64decode(firebase_creds_raw).decode('utf-8')
+                creds_dict = json.loads(decoded_creds)
+                print("[FIREBASE] Initializing from Base64 environment variable.")
+            except Exception:
+                # If not base64, assume it's raw JSON
+                creds_dict = json.loads(firebase_creds_raw)
+                print("[FIREBASE] Initializing from raw JSON environment variable.")
+                
             cred = credentials.Certificate(creds_dict)
-            print("[FIREBASE] Initializing from environment variable.")
         else:
             # Fallback to local file
             cred = credentials.Certificate(cred_path)
