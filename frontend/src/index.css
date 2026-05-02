@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* LIGHT THEME: Beige & Marrom */
+    --bg-base: #FFFDD0; /* Beige/Cream */
+    --bg-surface: #FDF9E1; 
+    --bg-surface-deep: #FAF3D0;
+    --bg-surface-hover: #F2E8C4;
+    --text-main: #3D0010; /* Marrom (Dark) */
+    --text-muted: #800020; /* Marrom (Medium) */
+    --border-subtle: #EADCAE;
+    --border-highlight: #800020;
+    --color-primary: #800020; /* Marrom */
+    --color-secondary: #5C0017;
+    --active-surface: #F2E8C4;
+    --status-indicator: #800020;
+  }
+
+  :root[data-theme='dark'] {
+    /* DARK THEME: Deep Burgundy & Cream */
+    --bg-base: #2D000A; /* Deep Burgundy */
+    --bg-surface: #3D0010;
+    --bg-surface-deep: #1A0005;
+    --bg-surface-hover: #4D0015;
+    --text-main: #FFFDD0; /* Cream */
+    --text-muted: #F2E8C4;
+    --border-subtle: #4D0015;
+    --border-highlight: #800020;
+    --color-primary: #800020; /* Burgundy */
+    --color-secondary: #FF4D6D; /* Pinkish Accent */
+    --active-surface: #4D0015;
+    --status-indicator: #FFFDD0;
+  }
+
+  body {
+    background: var(--bg-base);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    @apply antialiased transition-colors duration-300;
+  }
+
+  :root[data-theme='dark'] body {
+    background: linear-gradient(135deg, #2D000A 0%, #3D0010 100%);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif !important;
+  }
+}
+
+/* Hide scrollbars but keep functionality */
+.custom-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.custom-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
