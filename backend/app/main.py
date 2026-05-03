@@ -4,7 +4,22 @@ import json
 import base64
 import httpx
 import asyncio
+import itertools
 from typing import List, Optional
+
+_groq_key_cycle = None
+
+def get_next_groq_key():
+    global _groq_key_cycle
+    if _groq_key_cycle is None:
+        keys_str = os.getenv("GROQ_API_KEY", "")
+        keys = [k.strip() for k in keys_str.split(",") if k.strip()]
+        if keys:
+            _groq_key_cycle = itertools.cycle(keys)
+        else:
+            return None
+    return next(_groq_key_cycle) if _groq_key_cycle else None
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -157,7 +172,7 @@ def extract_json(content: str):
 
 async def perform_groq_analysis(url: str, dom: str, wcag_level: str) -> list:
     """Specialized analysis for Motor and Cognitive disabilities using Groq."""
-    groq_key = os.getenv("GROQ_API_KEY")
+    groq_key = get_next_groq_key()
     if not groq_key:
         print("[WARN] GROQ_API_KEY not found. Skipping specialized analysis.")
         return []
@@ -167,7 +182,7 @@ async def perform_groq_analysis(url: str, dom: str, wcag_level: str) -> list:
     for tag in soup(["script", "style", "svg", "path", "iframe", "noscript", "canvas", "head", "link", "meta"]):
         tag.decompose()
     # Aggressive truncation as requested
-    clean_dom = str(soup)[:8000]
+    clean_dom = str(soup)[:4000]
 
     prompt = f"""You are an accessibility expert specializing in MOTOR and COGNITIVE disabilities.
 Audit this page for exactly 5 high-impact issues related to:
@@ -208,23 +223,33 @@ For Cognitive fixes, show structural improvements like 'aria-describedby' or sim
   }}
 ]
 """
-    try:
-        async with httpx.AsyncClient(timeout=45.0) as client:
-            response = await client.post(
-                "https://api.groq.com/openai/v1/chat/completions",
-                headers={"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"},
-                json={
-                    "model": "llama-3.1-8b-instant", # Switched from 70b to 8b for higher TPM limits
-                    "messages": [{"role": "user", "content": prompt}],
-                    "temperature": 0.1
-                }
-            )
-            data = response.json()
-            content = data["choices"][0]["message"]["content"]
-            return extract_json(content)
-    except Exception as e:
-        print(f"[ERROR] Groq analysis failed: {e}")
-        return []
+    payload = {
+        "model": "llama-3.1-8b-instant", # Switched from 70b to 8b for higher TPM limits
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.1
+    }
+    
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            async with httpx.AsyncClient(timeout=45.0) as client:
+                response = await client.post(
+                    "https://api.groq.com/openai/v1/chat/completions",
+                    headers={"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"},
+                    json=payload
+                )
+                if response.status_code == 429:
+                    print(f"[WARN] Rate limit on key {groq_key[:8]}..., rotating key")
+                    groq_key = get_next_groq_key()
+                    continue
+                    
+                data = response.json()
+                content = data["choices"][0]["message"]["content"]
+                return extract_json(content)
+        except Exception as e:
+            print(f"[ERROR] Groq analysis failed: {e}")
+            break
+    return []
 
 # ─── Pydantic Models ──────────────────────────────────────────────────────────
 
@@ -435,11 +460,11 @@ async def perform_ai_audit(url: str, dom: str, axe_violations: list, wcag_level:
     for tag in soup(["script", "style", "svg", "path", "iframe", "noscript", "canvas", "head", "link", "meta"]):
         tag.decompose()
     # Aggressive truncation to stay well within Groq TPM limits (12k tokens)
-    clean_dom = str(soup)[:10000] 
+    clean_dom = str(soup)[:5000] 
 
     # Capture top axe violations
     axe_summary = []
-    for v in axe_violations[:5]: # Reduced from 10 to 5
+    for v in axe_violations[:3]: # Reduced from 5 to 3
         node_html = v.get("nodes", [{}])[0].get("html", "") if v.get("nodes") else ""
         axe_summary.append({
             "id": v.get("id"),
@@ -452,7 +477,7 @@ async def perform_ai_audit(url: str, dom: str, axe_violations: list, wcag_level:
     level_rules = get_rules_for_level(wcag_level)
     minimal_rules = build_minimal_rules(level_rules)
     # Drastic reduction of rules to save tokens
-    rules_json = json.dumps(minimal_rules, separators=(",", ":"))[:2500] 
+    rules_json = json.dumps(minimal_rules, separators=(",", ":"))[:1500] 
     axe_json = json.dumps(axe_summary, separators=(",", ":"))
 
     prompt = f"""You are an expert WCAG 2.2 accessibility auditor. Audit: {url}
@@ -534,14 +559,10 @@ Return ONLY valid JSON:
   }}
 }}"""
 
-    groq_key = os.getenv("GROQ_API_KEY")
+    groq_key = get_next_groq_key()
     if not groq_key:
         raise Exception("GROQ_API_KEY not found in environment.")
 
-    headers = {
-        "Authorization": f"Bearer {groq_key}",
-        "Content-Type": "application/json"
-    }
     payload = {
         "model": "llama-3.3-70b-versatile",
         "messages": [
@@ -553,19 +574,31 @@ Return ONLY valid JSON:
         "temperature": 0.1
     }
 
-    async with httpx.AsyncClient(timeout=120.0) as client:
-        response = await client.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload)
-        if response.status_code != 200:
-            raise Exception(f"Groq API Error: {response.text}")
+    max_retries = 3
+    for attempt in range(max_retries):
+        headers = {
+            "Authorization": f"Bearer {groq_key}",
+            "Content-Type": "application/json"
+        }
+        async with httpx.AsyncClient(timeout=120.0) as client:
+            response = await client.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload)
+            if response.status_code == 429:
+                print(f"[WARN] Rate limit on key {groq_key[:8]}..., rotating key")
+                groq_key = get_next_groq_key()
+                continue
+            if response.status_code != 200:
+                raise Exception(f"Groq API Error: {response.text}")
 
-        result = response.json()
-        raw_content = result["choices"][0]["message"]["content"]
-        print(f"[AI] Response length: {len(raw_content)} chars")
-        
-        if not raw_content or not raw_content.strip():
-            raise Exception("AI returned an empty response.")
+            result = response.json()
+            raw_content = result["choices"][0]["message"]["content"]
+            print(f"[AI] Response length: {len(raw_content)} chars")
+            
+            if not raw_content or not raw_content.strip():
+                raise Exception("AI returned an empty response.")
 
-        return extract_json(raw_content)
+            return extract_json(raw_content)
+            
+    raise Exception(f"Groq API Error: Rate limit exceeded on all retries.")
 
 
 # ─── Scan Endpoint ────────────────────────────────────────────────────────────
@@ -731,7 +764,7 @@ async def scan_url(request: ScanRequest):
 @app.post("/remediate")
 async def remediate_issues(request: RemediateRequest):
     """Chat with AI to discuss and fix selected accessibility issues."""
-    groq_key = os.getenv("GROQ_API_KEY")
+    groq_key = get_next_groq_key()
     if not groq_key:
         raise HTTPException(status_code=500, detail="GROQ_API_KEY not configured on server.")
 
@@ -850,23 +883,33 @@ RULE 6: End each fix with: **WCAG:** [criterion number and name]
         messages.append(h)
     messages.append({"role": "user", "content": request.user_query})
 
+    payload = {
+        "model": "llama-3.1-8b-instant",
+        "messages": messages,
+        "temperature": 0.5
+    }
+    
+    max_retries = 3
     try:
-        async with httpx.AsyncClient(timeout=60.0) as client:
-            response = await client.post(
-                "https://api.groq.com/openai/v1/chat/completions",
-                headers={"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"},
-                json={
-                    "model": "llama-3.1-8b-instant",
-                    "messages": messages,
-                    "temperature": 0.5
-                }
-            )
-            data = response.json()
-            if "choices" not in data:
-                err_detail = data.get("error", {}).get("message", str(data))[:300]
-                print(f"[REMEDIATE ERROR] Groq returned no choices: {err_detail}")
-                raise HTTPException(status_code=500, detail=f"AI API error: {err_detail}")
-            return {"content": data["choices"][0]["message"]["content"]}
+        for attempt in range(max_retries):
+            async with httpx.AsyncClient(timeout=60.0) as client:
+                response = await client.post(
+                    "https://api.groq.com/openai/v1/chat/completions",
+                    headers={"Authorization": f"Bearer {groq_key}", "Content-Type": "application/json"},
+                    json=payload
+                )
+                if response.status_code == 429:
+                    print(f"[WARN] Rate limit on key {groq_key[:8]}..., rotating key")
+                    groq_key = get_next_groq_key()
+                    continue
+                    
+                data = response.json()
+                if "choices" not in data:
+                    err_detail = data.get("error", {}).get("message", str(data))[:300]
+                    print(f"[REMEDIATE ERROR] Groq returned no choices: {err_detail}")
+                    raise HTTPException(status_code=500, detail=f"AI API error: {err_detail}")
+                return {"content": data["choices"][0]["message"]["content"]}
+        raise HTTPException(status_code=500, detail="Rate limit exceeded on all retries.")
     except HTTPException:
         raise
     except Exception as e:
