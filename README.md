@@ -2,6 +2,11 @@
 
 A comprehensive, AI-powered Web Accessibility Audit Platform designed to identify and remediate WCAG 2.1/2.2 violations.
 
+Live Website:
+https://accessi-scan-final.vercel.app/
+View Demo Video 
+https://youtu.be/BZ1RKHLO_F0?si=u0 iFdI9cThc_0PRy 
+
 ## 🚀 Features
 
 - **Global URL Scanner**: Audit public webpages for standard WCAG compliance.
