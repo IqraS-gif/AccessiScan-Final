@@ -408,14 +408,14 @@ export default function Report() {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <div>
                   <h3 className="text-xl font-bold text-main">Detected Violations ({issues.length})</h3>
-                  <div className="mt-4 bg-primary/10 border border-primary/20 rounded-xl p-4 flex items-start gap-3 shadow-sm relative overflow-hidden group max-w-2xl">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/20 transition-all"></div>
-                    <div className="bg-primary text-slate-900 p-2 rounded-lg shrink-0 mt-0.5 shadow-md border border-white/20">
-                      <Info size={20} className="stroke-[3px]" />
+                  <div className="mt-4 bg-primary border border-primary/20 rounded-xl p-5 flex items-start gap-4 shadow-xl relative overflow-hidden group max-w-2xl">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-white/20 transition-all"></div>
+                    <div className="bg-white/20 text-white p-2 rounded-lg shrink-0 mt-0.5 shadow-md border border-white/10">
+                      <Info size={22} className="stroke-[3px]" />
                     </div>
                     <div className="relative z-10">
-                      <h4 className="text-primary font-black mb-1 flex items-center gap-2">Interactive Issue Cards</h4>
-                      <p className="text-sm font-medium text-primary/80 leading-relaxed">
+                      <h4 className="text-white font-black mb-1 flex items-center gap-2 text-lg">Interactive Issue Cards</h4>
+                      <p className="text-sm font-medium text-white/90 leading-relaxed">
                         Click on any issue card below to view detailed DOM evidence, geometric location, and context-aware AI remediation strategies.
                       </p>
                     </div>
