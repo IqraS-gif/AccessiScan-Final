@@ -7,6 +7,7 @@ const DownloadCards = () => {
     <div className="flex flex-wrap justify-center gap-8 w-full mb-16 relative z-20">
       <Card 
         title="AccessiBrowser" 
+        desc="Audit live pages & internal dashboards instantly"
         href="/AccessiBrowser.zip"
         download="AccessiBrowser.zip"
         icon={<Chrome size={54} className="icon-svg" color="#FF5252" strokeWidth={1.5} />}
@@ -16,6 +17,7 @@ const DownloadCards = () => {
       />
       <Card 
         title="AccessiSimulate" 
+        desc="Experience web apps through disability simulators"
         href="/AccessiSimulate.zip"
         download="AccessiSimulate.zip"
         icon={<Globe size={54} className="icon-svg" color="#448AFF" strokeWidth={1.5} />}
@@ -25,6 +27,7 @@ const DownloadCards = () => {
       />
       <Card 
         title="VS Code Ext." 
+        desc="Fix accessibility issues directly in your IDE"
         href="https://marketplace.visualstudio.com/items?itemName=zahidham2985.accessiscan-vscode"
         icon={<Code2 size={54} className="icon-svg" color="#00BFA5" strokeWidth={1.5} />}
         color1="#64FFDA" color2="#00BFA5"
@@ -35,7 +38,7 @@ const DownloadCards = () => {
   );
 };
 
-const Card = ({ title, href, download, icon, color1, color2, light1, light2, shadow }) => {
+const Card = ({ title, desc, href, download, icon, color1, color2, light1, light2, shadow }) => {
   return (
     <StyledWrapper style={{
       '--bg-color': `linear-gradient(135deg, ${color1}, ${color2})`,
@@ -47,7 +50,8 @@ const Card = ({ title, href, download, icon, color1, color2, light1, light2, sha
         <div className="circle">
           {icon}
         </div>
-        <p>{title}</p>
+        <p className="title">{title}</p>
+        <span className="desc">{desc}</span>
       </a>
     </StyledWrapper>
   );
@@ -94,7 +98,8 @@ const StyledWrapper = styled.div`
     background: var(--bg-color-light);
   }
 
-  .card:hover p {
+  .card:hover .title,
+  .card:hover .desc {
     color: var(--text-color-hover);
   }
   
@@ -103,13 +108,26 @@ const StyledWrapper = styled.div`
     color: #ffffff;
   }
 
-  .card p {
+  .card .title {
     font-size: 17px;
     color: #5d4037;
     margin-top: 30px;
+    margin-bottom: 6px;
     z-index: 1000;
     transition: color 0.3s ease-out;
-    font-weight: 700;
+    font-weight: 900;
+    text-align: center;
+  }
+
+  .card .desc {
+    font-size: 11px;
+    color: #8d6e63;
+    z-index: 1000;
+    text-align: center;
+    padding: 0 16px;
+    transition: color 0.3s ease-out;
+    line-height: 1.4;
+    font-weight: 600;
   }
 
   .circle {
