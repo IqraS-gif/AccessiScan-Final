@@ -166,7 +166,9 @@ export default function Landing() {
               Start Free Audit <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <a
-              href="#demo"
+              href="https://youtu.be/BZ1RKHLO_F0"
+              target="_blank"
+              rel="noreferrer"
               className="flex items-center justify-center gap-2 bg-surface border border-border-subtle text-main px-10 py-4 rounded-full font-bold text-lg hover:bg-surface-hover hover:-translate-y-1 transition-all duration-300 backdrop-blur-md shadow-lg"
             >
               View Demo
