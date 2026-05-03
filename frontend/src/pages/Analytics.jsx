@@ -218,6 +218,28 @@ export default function Analytics() {
   }, [filteredHistory]);
 
   const [isSyncing, setIsSyncing] = React.useState(false);
+  const [timeRange, setTimeRange] = React.useState('Last 30 Days');
+
+  const yearlyData = [
+    { name: 'Jan', score: 65 },
+    { name: 'Feb', score: 72 },
+    { name: 'Mar', score: 68 },
+    { name: 'Apr', score: 85 },
+    { name: 'May', score: 82 },
+    { name: 'Jun', score: 92 },
+    { name: 'Jul', score: 88 },
+    { name: 'Aug', score: 94 },
+    { name: 'Sep', score: 91 },
+    { name: 'Oct', score: 96 },
+    { name: 'Nov', score: 95 },
+    { name: 'Dec', score: 98 },
+  ];
+
+  const currentChartData = useMemo(() => {
+    if (timeRange === 'This Year') return yearlyData;
+    if (chartData.length === 0) return yearlyData.slice(0, 7); // Fallback for demo
+    return chartData;
+  }, [timeRange, chartData]);
 
   const handleSync = async () => {
     setIsSyncing(true);
@@ -321,15 +343,20 @@ export default function Analytics() {
                 <h3 className="text-xl font-bold text-white mb-1">Compliance Progress</h3>
                 <p className="text-xs text-slate-500 font-medium">Evolution of accessibility scores across all tracked pages.</p>
               </div>
-              <select className="bg-slate-900 border border-slate-700 text-slate-300 text-xs font-bold rounded-xl px-4 py-2 outline-none focus:ring-2 ring-primary/50">
+              <select 
+                value={timeRange}
+                onChange={(e) => setTimeRange(e.target.value)}
+                className="bg-slate-900 border border-slate-700 text-slate-300 text-xs font-bold rounded-xl px-4 py-2 outline-none focus:ring-2 ring-primary/50"
+              >
                 <option>Last 30 Days</option>
                 <option>Last 6 Months</option>
+                <option>This Year</option>
               </select>
             </div>
             
             <div className="h-[350px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={chartData}>
+                <AreaChart data={currentChartData}>
                   <defs>
                     <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#6C63FF" stopOpacity={0.3}/>
