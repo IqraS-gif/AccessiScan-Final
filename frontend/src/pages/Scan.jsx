@@ -188,6 +188,39 @@ export default function Scan() {
                     )}
                   </AnimatePresence>
 
+                  {/* Preset Websites for Quick Scan */}
+                  {!isScanning && (
+                    <div className="mt-12 pt-8 border-t border-border-subtle/30">
+                      <p className="text-xs text-slate-500 font-bold uppercase tracking-[0.2em] mb-6">Or simply choose from these websites</p>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        {[
+                          { name: 'APSIT Moodle', url: 'https://elearn.apsit.edu.in/moodle/' },
+                          { name: 'MedLab AI', url: 'https://medlab-ai.web.app/' },
+                          { name: 'AI Career Coach', url: 'https://aicareer-coach.github.io/AI-Career-coach/index.html' }
+                        ].map((site) => (
+                          <button
+                            key={site.url}
+                            type="button"
+                            onClick={async () => {
+                              setUrl(site.url);
+                              try {
+                                await startScan(site.url, wcagLevel);
+                                navigate('/report/current');
+                              } catch (err) {
+                                alert(`Scan failed: ${err}`);
+                              }
+                            }}
+                            className="group p-4 bg-slate-900/40 border border-slate-700/50 rounded-2xl text-left hover:border-primary/50 transition-all hover:-translate-y-1 shadow-sm relative overflow-hidden"
+                          >
+                            <div className="absolute top-0 right-0 w-16 h-16 bg-primary/5 blur-xl rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/10 transition-all"></div>
+                            <p className="text-xs font-black text-main group-hover:text-primary transition-colors truncate relative z-10">{site.name}</p>
+                            <p className="text-[10px] text-muted truncate mt-1 relative z-10">{new URL(site.url).host}</p>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                 </div>
               </motion.div>
             )}
