@@ -35,7 +35,7 @@ export default function AppRoutes() {
             <PageTransition>
               <div className="space-y-8">
                 <div>
-                  <h1 className="text-3xl font-bold text-white mb-2">Chrome Extensions</h1>
+                  <h1 className="text-3xl font-bold text-white mb-2">View Extensions</h1>
                   <p className="text-slate-400">Manage and install the AccessiScan auditor browser tools.</p>
                 </div>
                 <ExtensionManagement onFileUpload={(e) => {
