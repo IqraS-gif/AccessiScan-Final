@@ -408,10 +408,18 @@ export default function Report() {
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <div>
                   <h3 className="text-xl font-bold text-main">Detected Violations ({issues.length})</h3>
-                  <p className="text-sm font-medium text-primary mt-2 flex items-center gap-1.5">
-                    <span className="bg-primary/20 p-1 rounded-md"><Info size={14} className="text-primary" /></span>
-                    Click on any issue card below to view detailed evidence and AI remediation strategy
-                  </p>
+                  <div className="mt-4 bg-primary/10 border border-primary/20 rounded-xl p-4 flex items-start gap-3 shadow-sm relative overflow-hidden group max-w-2xl">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/20 transition-all"></div>
+                    <div className="bg-primary text-slate-900 p-2 rounded-lg shrink-0 mt-0.5 shadow-md border border-white/20">
+                      <Info size={20} className="stroke-[3px]" />
+                    </div>
+                    <div className="relative z-10">
+                      <h4 className="text-primary font-black mb-1 flex items-center gap-2">Interactive Issue Cards</h4>
+                      <p className="text-sm font-medium text-primary/80 leading-relaxed">
+                        Click on any issue card below to view detailed DOM evidence, geometric location, and context-aware AI remediation strategies.
+                      </p>
+                    </div>
+                  </div>
                 </div>
                 <div className="flex bg-slate-900 p-1 rounded-xl border border-slate-800 shrink-0">
                   <button onClick={() => setSortBy('severity')} className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${sortBy === 'severity' ? 'bg-primary text-slate-900 shadow-lg' : 'text-slate-400 hover:text-slate-200'}`}>By Severity</button>
