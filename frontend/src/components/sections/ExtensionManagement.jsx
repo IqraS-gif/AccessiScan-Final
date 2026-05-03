@@ -17,8 +17,8 @@ export default function ExtensionManagement({ onFileUpload }) {
           </p>
           
           <a 
-            href="/accessibrowser.zip" 
-            download="accessibrowser.zip"
+            href="/AccessiBrowser.zip" 
+            download="AccessiBrowser.zip"
             className="w-full bg-primary hover:bg-primary/90 text-slate-900 font-bold py-3.5 px-4 rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 group"
           >
             <Download size={18} className="group-hover:-translate-y-0.5 transition-transform" />
@@ -37,8 +37,8 @@ export default function ExtensionManagement({ onFileUpload }) {
           </p>
           
           <a 
-            href="/accessisimulate.zip" 
-            download="accessisimulate.zip"
+            href="/AccessiSimulate.zip" 
+            download="AccessiSimulate.zip"
             className="w-full bg-slate-700 hover:bg-slate-600 border border-slate-600 text-white font-bold py-3.5 px-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2 group"
           >
             <Download size={18} className="group-hover:-translate-y-0.5 transition-transform" />

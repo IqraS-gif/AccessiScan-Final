@@ -3,7 +3,7 @@
  * Communicates with the FastAPI backend at localhost:8000
  */
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = "https://accessiscan-extension-backend.onrender.com";
 
 // ─── DOM References ────────────────────────────────────────────────
 const $ = (sel) => document.querySelector(sel);
