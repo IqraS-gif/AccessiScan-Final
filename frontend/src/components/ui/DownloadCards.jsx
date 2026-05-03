@@ -46,6 +46,7 @@ const Card = ({ title, desc, href, download, icon, color1, color2, light1, light
       '--box-shadow-color': shadow
     }}>
       <a href={href} download={download} target={download ? undefined : "_blank"} rel="noreferrer" className="card wallet gradient">
+        <span className="top-text">Click to Visit</span>
         <div className="overlay" />
         <div className="circle">
           {icon}
@@ -76,6 +77,25 @@ const StyledWrapper = styled.div`
     box-shadow: 0 14px 26px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease-out;
     text-decoration: none;
+  }
+
+  .card .top-text {
+    position: absolute;
+    top: 20px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #8d6e63;
+    z-index: 1000;
+    transition: all 0.3s ease-out;
+    opacity: 0.6;
+  }
+
+  .card:hover .top-text {
+    color: var(--text-color-hover);
+    opacity: 0.9;
+    transform: translateY(-2px);
   }
 
   .card:hover {
