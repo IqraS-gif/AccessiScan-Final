@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useThemeStore } from '../store/useThemeStore';
 import { ArrowRight, Sparkles, LayoutDashboard, Code2, Chrome, ScanLine, ShieldCheck, Zap, Loader2 } from 'lucide-react';
 import FeatureCard from '../components/ui/FeatureCard';
+import DownloadCards from '../components/ui/DownloadCards';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },
@@ -294,6 +295,9 @@ export default function Landing() {
             <p className="text-muted max-w-2xl mx-auto text-xl font-light">Everything you need to ship accessible web products, architected cleanly into a single interactive workflow.</p>
           </motion.div>
         </div>
+
+        {/* 3 Download Cards */}
+        <DownloadCards />
 
         {/* CSS GRID OF INTERACTIVE FLIP CARDS */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-16 perspective-1000">
