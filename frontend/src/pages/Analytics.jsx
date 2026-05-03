@@ -217,6 +217,14 @@ export default function Analytics() {
       .map(([title, count]) => ({ title, count }));
   }, [filteredHistory]);
 
+  const [isSyncing, setIsSyncing] = React.useState(false);
+
+  const handleSync = async () => {
+    setIsSyncing(true);
+    await fetchHistory();
+    setTimeout(() => setIsSyncing(false), 1000); // UI buffer
+  };
+
   return (
     <PageTransition>
       <motion.div 
@@ -250,11 +258,13 @@ export default function Analytics() {
                 </div>
               </div>
             )}
-            <button className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white px-4 py-2.5 rounded-xl border border-slate-700 transition-all text-sm font-bold">
-              <DownloadIcon size={18} /> Export Data
-            </button>
-            <button className="flex items-center gap-2 bg-primary text-slate-900 px-6 py-2.5 rounded-xl font-black shadow-lg shadow-primary/20 hover:-translate-y-0.5 transition-all text-sm">
-              <Activity size={18} /> Sync History
+            <button 
+              onClick={handleSync}
+              disabled={isSyncing}
+              className={`flex items-center gap-2 bg-primary text-slate-900 px-6 py-2.5 rounded-xl font-black shadow-lg shadow-primary/20 hover:-translate-y-0.5 transition-all text-sm ${isSyncing ? 'opacity-70 cursor-wait' : ''}`}
+            >
+              <Activity size={18} className={isSyncing ? 'animate-spin' : ''} />
+              {isSyncing ? 'Syncing...' : 'Sync History'}
             </button>
           </div>
         </div>
