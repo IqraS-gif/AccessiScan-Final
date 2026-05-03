@@ -409,13 +409,13 @@ export default function Report() {
                 <div>
                   <h3 className="text-xl font-bold text-main">Detected Violations ({issues.length})</h3>
                   <div className="mt-4 bg-primary border border-primary/20 rounded-xl p-5 flex items-start gap-4 shadow-xl relative overflow-hidden group max-w-2xl">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-white/20 transition-all"></div>
-                    <div className="bg-white/20 text-white p-2 rounded-lg shrink-0 mt-0.5 shadow-md border border-white/10">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#fdfde1]/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:bg-[#fdfde1]/20 transition-all"></div>
+                    <div className="bg-[#fdfde1]/20 text-[#fdfde1] p-2 rounded-lg shrink-0 mt-0.5 shadow-md border border-[#fdfde1]/10">
                       <Info size={22} className="stroke-[3px]" />
                     </div>
                     <div className="relative z-10">
-                      <h4 className="text-white font-black mb-1 flex items-center gap-2 text-lg">Interactive Issue Cards</h4>
-                      <p className="text-sm font-medium text-white/90 leading-relaxed">
+                      <h4 className="text-[#fdfde1] font-black mb-1 flex items-center gap-2 text-lg">Interactive Issue Cards</h4>
+                      <p className="text-sm font-medium text-[#fdfde1]/90 leading-relaxed">
                         Click on any issue card below to view detailed DOM evidence, geometric location, and context-aware AI remediation strategies.
                       </p>
                     </div>
