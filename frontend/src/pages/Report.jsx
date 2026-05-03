@@ -406,8 +406,14 @@ export default function Report() {
             {/* Issue Breakdown */}
             <div className="bg-slate-800/40 backdrop-blur-md border border-slate-800 p-6 rounded-3xl shrink-0">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <h3 className="text-xl font-bold text-main">Detected Violations ({issues.length})</h3>
-                <div className="flex bg-slate-900 p-1 rounded-xl border border-slate-800">
+                <div>
+                  <h3 className="text-xl font-bold text-main">Detected Violations ({issues.length})</h3>
+                  <p className="text-sm font-medium text-primary mt-2 flex items-center gap-1.5">
+                    <span className="bg-primary/20 p-1 rounded-md"><Info size={14} className="text-primary" /></span>
+                    Click on any issue card below to view detailed evidence and AI remediation strategy
+                  </p>
+                </div>
+                <div className="flex bg-slate-900 p-1 rounded-xl border border-slate-800 shrink-0">
                   <button onClick={() => setSortBy('severity')} className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${sortBy === 'severity' ? 'bg-primary text-slate-900 shadow-lg' : 'text-slate-400 hover:text-slate-200'}`}>By Severity</button>
                   <button onClick={() => setSortBy('disability')} className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${sortBy === 'disability' ? 'bg-primary text-slate-900 shadow-lg' : 'text-slate-400 hover:text-slate-200'}`}>By Disability</button>
                 </div>
