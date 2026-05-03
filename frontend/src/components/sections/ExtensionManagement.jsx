@@ -64,7 +64,7 @@ export default function ExtensionManagement({ onFileUpload }) {
             { step: "04", title: "Load Unpacked", desc: "Click 'Load unpacked' and select the unzipped extension folders." }
           ].map((item, idx) => (
             <div key={idx} className="space-y-3">
-              <span className="text-3xl font-black text-slate-800 block">{item.step}</span>
+              <span className="text-4xl font-black text-primary/40 block">{item.step}</span>
               <h4 className="font-bold text-white text-sm">{item.title}</h4>
               <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
             </div>
