@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Chrome, Globe, Download, CheckCircle, Upload } from 'lucide-react';
+import { Chrome, Globe, Download, CheckCircle, Upload, Code2 } from 'lucide-react';
 
 export default function ExtensionManagement({ onFileUpload }) {
   return (
@@ -45,6 +45,28 @@ export default function ExtensionManagement({ onFileUpload }) {
             Download AccessiSimulate
           </a>
         </div>
+      </div>
+
+      {/* VS Code Extension Card */}
+      <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 p-8 rounded-3xl shadow-xl flex flex-col hover:border-emerald-400/30 transition-colors relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400/5 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
+        <div className="w-14 h-14 rounded-2xl bg-emerald-400/20 flex items-center justify-center text-emerald-400 mb-6 shadow-inner border border-emerald-400/20 relative z-10">
+          <Code2 size={28} />
+        </div>
+        <h2 className="text-2xl font-bold text-white mb-2 relative z-10">VS Code Extension</h2>
+        <p className="text-slate-400 mb-8 leading-relaxed max-w-3xl relative z-10">
+          Fix accessibility issues directly inside your IDE. Get real-time linting, AI remediation suggestions, and WCAG compliance checks as you code.
+        </p>
+        
+        <a 
+          href="https://marketplace.visualstudio.com/items?itemName=zahidham2985.accessiscan-vscode" 
+          target="_blank"
+          rel="noreferrer"
+          className="w-full sm:w-auto self-start bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 px-8 rounded-xl transition-all shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2 group relative z-10"
+        >
+          <Download size={18} className="group-hover:-translate-y-0.5 transition-transform" />
+          View in VS Code Marketplace
+        </a>
       </div>
 
       {/* Installation Guide */}

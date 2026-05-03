@@ -9,10 +9,9 @@ import {
 const NAV_ITEMS = [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { name: 'Scan Website', path: '/scan', icon: Target },
-  { name: 'Projects', path: '/projects', icon: FolderKanban },
   { name: 'Reports', path: '/reports', icon: FileBarChart },
   { name: 'Trends & History', path: '/analytics', icon: TrendingUp },
-  { name: 'Chrome Extension', path: '/extension', icon: Chrome }, 
+  { name: 'View Extensions', path: '/extension', icon: Chrome }, 
   { name: 'Settings', path: '/settings', icon: Settings },
 ];
 
