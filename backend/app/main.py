@@ -741,6 +741,13 @@ async def scan_url(request: ScanRequest):
             try:
                 # Firestore requires plain dicts without complex Pydantic objects
                 report_dict = json.loads(report.json())
+                
+                # CRITICAL: Strip out base64 images to prevent Firestore 1MB size limit error
+                report_dict["full_page_screenshot"] = None
+                for issue in report_dict.get("issues", []):
+                    if issue.get("proof") and "element_screenshot" in issue["proof"]:
+                        issue["proof"]["element_screenshot"] = None
+
                 db.collection("scans").add({
                     "url": url,
                     "timestamp": datetime.utcnow(),
