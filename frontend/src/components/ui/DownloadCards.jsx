@@ -86,10 +86,10 @@ const StyledWrapper = styled.div`
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #8d6e63;
+    color: #5d4037;
     z-index: 1000;
     transition: all 0.3s ease-out;
-    opacity: 0.6;
+    opacity: 0.8;
   }
 
   .card:hover .top-text {
